@@ -8,15 +8,16 @@ export default function Home() {
   useEffect(() => {
     const loadCustomizations = () => {
       const savedCustomizations = JSON.parse(
-        localStorage.getItem("pageCustomizations") || "{}"
+        localStorage.getItem("homeCustomizations") || "{}"
       );
-      if (savedCustomizations.heroBackground) {
-        setHeroBg(savedCustomizations.heroBackground);
+      if (savedCustomizations.background) {
+        setHeroBg(savedCustomizations.background);
+      } else {
+        setHeroBg("");
       }
     };
 
     loadCustomizations();
-
     window.addEventListener("storage", loadCustomizations);
     return () => window.removeEventListener("storage", loadCustomizations);
   }, []);
