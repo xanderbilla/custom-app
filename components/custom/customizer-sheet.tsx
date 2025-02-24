@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,10 +15,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import Image from "next/image";
 
 export default function CustomizerSheet() {
-  const [page, setPage] = useState("home");
+  const pathname = usePathname();
+  const getPageFromPath = (path: string) => {
+    if (path.includes("page1")) return "page1";
+    if (path.includes("page2")) return "page2";
+    if (path.includes("page3")) return "page3";
+    return "home";
+  };
+
+  const [page, setPage] = useState(getPageFromPath(pathname));
   const [backgroundImage, setBackgroundImage] = useState("");
+
+  useEffect(() => {
+    setPage(getPageFromPath(pathname));
+  }, [pathname]);
 
   useEffect(() => {
     loadCustomizations();
@@ -29,11 +43,7 @@ export default function CustomizerSheet() {
     const savedCustomizations = JSON.parse(
       localStorage.getItem(`${page}Customizations`) || "{}"
     );
-    if (savedCustomizations.background) {
-      setBackgroundImage(savedCustomizations.background);
-    } else {
-      setBackgroundImage("");
-    }
+    setBackgroundImage(savedCustomizations.background || "");
   };
 
   const applyChanges = () => {
@@ -51,7 +61,7 @@ export default function CustomizerSheet() {
   const resetChanges = () => {
     localStorage.removeItem(`${page}Customizations`);
     setBackgroundImage("");
-    window.dispatchEvent(new Event("storage")); // Ensure instant UI update
+    window.dispatchEvent(new Event("storage")); // Trigger update
   };
 
   return (
@@ -62,7 +72,9 @@ export default function CustomizerSheet() {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Customize Page</SheetTitle>
-          <SheetDescription>Select customization options below.</SheetDescription>
+          <SheetDescription>
+            Select customization options for each page.
+          </SheetDescription>
         </SheetHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -70,7 +82,7 @@ export default function CustomizerSheet() {
               Page
             </Label>
             <select
-            title="Page"
+              title="Page"
               id="page"
               className="col-span-3"
               value={page}
@@ -79,11 +91,12 @@ export default function CustomizerSheet() {
               <option value="home">Home</option>
               <option value="page1">Page 1</option>
               <option value="page2">Page 2</option>
+              <option value="page3">Page 3</option>
             </select>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="background" className="text-right">
-              Image
+              Background Image
             </Label>
             <Input
               type="file"
@@ -106,7 +119,9 @@ export default function CustomizerSheet() {
           {backgroundImage && (
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right col-span-1">Preview</Label>
-              <img
+              <Image
+                width={200}
+                height={200}
                 src={backgroundImage}
                 alt="Background Preview"
                 className="col-span-3 h-20 w-full object-cover border rounded"
