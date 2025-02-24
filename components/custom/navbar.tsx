@@ -9,8 +9,9 @@ export default function Navbar({}: Props) {
     <nav className="bg-white text-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <Image title="logo" src="/logo.png" alt="logo" height={40} width={150} />
+          <div className="flex items-center text-2xl font-medium">
+{/*             <Image title="logo" src="/logo.png" alt="logo" height={40} width={150} /> */}
+            Momayya
           </div>
           <div className="flex items-center gap-2">
             <Dot size={36} color="green" />
