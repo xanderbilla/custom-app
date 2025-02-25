@@ -11,7 +11,7 @@ export default function Navbar({}: Props) {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center text-2xl font-medium">
             {/* <Image title="logo" src="/logo.png" alt="logo" height={40} width={150} /> */}
-          Momayya
+          Momaya
           </div>
           <div className="flex items-center gap-2">
             <Dot size={36} color="green" />
