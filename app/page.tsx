@@ -36,7 +36,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 text-center px-6">
           <h1 className="text-6xl font-extrabold tracking-tight">
-            Welcome to Momaya
+            Welcome to Momayya
           </h1>
           <p className="mt-6 text-xl max-w-2xl mx-auto">
             Discover amazing experiences crafted just for you.

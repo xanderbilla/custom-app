@@ -72,6 +72,13 @@ export default function CustomizerSheet() {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Customize Page</SheetTitle>
+          {/* Change theme */}
+          <div className="flex items-center space-x-4 py-2">
+            <div className="h-8 w-8 rounded-full bg-black shadow-lg cursor-pointer transition-transform hover:scale-110" />
+            <div className="h-8 w-8 rounded-full bg-green-500 shadow-lg cursor-pointer transition-transform hover:scale-110" />
+            <div className="h-8 w-8 rounded-full bg-blue-500 shadow-lg cursor-pointer transition-transform hover:scale-110" />
+            <div className="h-8 w-8 rounded-full bg-orange-500 shadow-lg cursor-pointer transition-transform hover:scale-110" />
+          </div>
           <SheetDescription>
             Select customization options for each page.
           </SheetDescription>
