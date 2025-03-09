@@ -17,7 +17,13 @@ import {
 } from "@/components/ui/sheet";
 import Image from "next/image";
 
-export default function CustomizerSheet() {
+interface CustomizerSheetProps {
+  onColorChange?: (newColor: string) => void;
+}
+
+export default function CustomizerSheet({
+  onColorChange,
+}: CustomizerSheetProps) {
   const pathname = usePathname();
   const getPageFromPath = (path: string) => {
     if (path.includes("page1")) return "page1";
@@ -28,6 +34,26 @@ export default function CustomizerSheet() {
 
   const [page, setPage] = useState(getPageFromPath(pathname));
   const [backgroundImage, setBackgroundImage] = useState("");
+  const [theme, setTheme] = useState("#fff");
+  console.log(theme);
+
+  useEffect(() => {
+    setPage(getPageFromPath(pathname));
+  }, [pathname]);
+
+  useEffect(() => {
+    const storedColor = localStorage.getItem("navbarColor");
+    if (storedColor) {
+      setTheme(storedColor);
+    }
+  }, []);
+
+  const handleColorChange = (newColor: string) => {
+    setTheme(newColor);
+    localStorage.setItem("navbarColor", newColor);
+    window.dispatchEvent(new Event("storage"));
+    if (onColorChange) onColorChange(newColor);
+  };
 
   useEffect(() => {
     setPage(getPageFromPath(pathname));
@@ -74,10 +100,22 @@ export default function CustomizerSheet() {
           <SheetTitle>Customize Page</SheetTitle>
           {/* Change theme */}
           <div className="flex items-center space-x-4 py-2">
-            <div className="h-8 w-8 rounded-full bg-black shadow-lg cursor-pointer transition-transform hover:scale-110" />
-            <div className="h-8 w-8 rounded-full bg-green-500 shadow-lg cursor-pointer transition-transform hover:scale-110" />
-            <div className="h-8 w-8 rounded-full bg-blue-500 shadow-lg cursor-pointer transition-transform hover:scale-110" />
-            <div className="h-8 w-8 rounded-full bg-orange-500 shadow-lg cursor-pointer transition-transform hover:scale-110" />
+            <div
+              className="h-8 w-8 rounded-full bg-black shadow-lg cursor-pointer transition-transform hover:scale-110"
+              onClick={() => handleColorChange("#000000")}
+            />
+            <div
+              className="h-8 w-8 rounded-full bg-green-500 shadow-lg cursor-pointer transition-transform hover:scale-110"
+              onClick={() => handleColorChange("#00FF00")}
+            />
+            <div
+              className="h-8 w-8 rounded-full bg-blue-500 shadow-lg cursor-pointer transition-transform hover:scale-110"
+              onClick={() => handleColorChange("#0000FF")}
+            />
+            <div
+              className="h-8 w-8 rounded-full bg-orange-500 shadow-lg cursor-pointer transition-transform hover:scale-110"
+              onClick={() => handleColorChange("#FFA500")}
+            />
           </div>
           <SheetDescription>
             Select customization options for each page.
@@ -128,10 +166,10 @@ export default function CustomizerSheet() {
               <Label className="text-right col-span-1">Preview</Label>
               <Image
                 width={200}
-                height={200}
+                height={600}
                 src={backgroundImage}
                 alt="Background Preview"
-                className="col-span-3 h-20 w-full object-cover border rounded"
+                className="col-span-3 h-72 w-full object-cover border rounded"
               />
             </div>
           )}

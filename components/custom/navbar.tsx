@@ -1,28 +1,42 @@
-// import Image from "next/image";
-import { Dot } from "lucide-react";
+"use client";
+
+import { useEffect, useState } from "react";
 import CustomizerSheet from "@/components/custom/customizer-sheet";
-import Image from "next/image";
+import { Dot } from "lucide-react";
 
-type Props = object;
+export default function Navbar() {
+  const [navbarColor, setNavbarColor] = useState("#ffffff");
 
-export default function Navbar({}: Props) {
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedColor = localStorage.getItem("navbarColor");
+      if (storedColor) {
+        setNavbarColor(storedColor);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    handleStorageChange(); // Initial load
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  const handleColorChange = (newColor: string) => {
+    setNavbarColor(newColor);
+    localStorage.setItem("navbarColor", newColor);
+    window.dispatchEvent(new Event("storage")); // Trigger event for instant update
+  };
+
   return (
-    <nav className="bg-white text-gray-900">
+    <nav style={{ backgroundColor: navbarColor }} className="text-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2 text-2xl font-medium">
-            <Image
-              src="/logo.png"
-              alt="momayya"
-              width={40}
-              height={40}
-              className="object-contain"
-            />
-            Momayya
-            </div>
+          <div className="flex items-center gap-2 text-2xl font-medium">Momayya</div>
           <div className="flex items-center gap-2">
             <Dot size={36} color="green" />
-            <CustomizerSheet />
+            <CustomizerSheet onColorChange={handleColorChange} />
           </div>
         </div>
       </div>
